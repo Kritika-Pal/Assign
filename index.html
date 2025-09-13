@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Signup</title>
+    <script>
+        function validateForm() {
+            const fullName = document.forms["signupForm"]["full_name"].value.trim();
+            const email = document.forms["signupForm"]["email"].value.trim();
+            const password = document.forms["signupForm"]["password"].value.trim();
+            const age = document.forms["signupForm"]["age"].value.trim();
+            const profilePic = document.forms["signupForm"]["profile_pic"].files[0];
+
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+            if (fullName === "" || email === "" || password === "" || age === "") {
+                alert("All fields are required.");
+                return false;
+            }
+
+            if (!emailPattern.test(email)) {
+                alert("Invalid email format.");
+                return false;
+            }
+
+            if (isNaN(age) || age < 1 || age > 120) {
+                alert("Enter a valid age.");
+                return false;
+            }
+
+            if (profilePic) {
+                const validTypes = ["image/jpeg", "image/png", "image/gif"];
+                if (!validTypes.includes(profilePic.type)) {
+                    alert("Profile picture must be JPG, PNG, or GIF.");
+                    return false;
+                }
+                if (profilePic.size > 2 * 1024 * 1024) {  // 2MB limit
+                    alert("Profile picture size must be under 2MB.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <h2>User Signup</h2>
+    <form name="signupForm" action="signup.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        Full Name: <input type="text" name="full_name" required><br><br>
+        Email: <input type="email" name="email" required><br><br>
+        Password: <input type="password" name="password" required><br><br>
+        Age: <input type="number" name="age" min="1" max="120" required><br><br>
+        Profile Picture: <input type="file" name="profile_pic" accept="image/*"><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>
